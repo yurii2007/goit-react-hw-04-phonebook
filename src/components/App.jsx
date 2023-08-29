@@ -8,7 +8,10 @@ const initializedState = [];
 const LOCAL_STORAGE_KEY = 'contacts';
 
 export const App = () => {
-  const [contacts, setContacts] = useLocalStorage(LOCAL_STORAGE_KEY, initializedState);
+  const [contacts, setContacts] = useLocalStorage(
+    LOCAL_STORAGE_KEY,
+    initializedState
+  );
   const [filter, setFilter] = useState('');
 
   const handleAddContact = newContact => {
@@ -16,7 +19,7 @@ export const App = () => {
       contact => newContact.name.toLowerCase() === contact.name.toLowerCase()
     );
     if (isExist) return alert(`${newContact.name} is already in contacts`);
-    setContacts([...contacts, newContact]);
+    setContacts(prevContacts => [...prevContacts, newContact]);
   };
 
   const handleFilter = event => {
@@ -24,14 +27,13 @@ export const App = () => {
   };
 
   const getFilteredContacts = () => {
-    const filteredContacts = [...contacts].filter(({ name }) =>
+    return [...contacts].filter(({ name }) =>
       name.toLowerCase().includes(filter.toLowerCase())
-    );
-    return filteredContacts;
+    )
   };
 
   const handleDeleteContact = contactId => {
-    setContacts(contacts.filter(({ id }) => id !== contactId));
+    setContacts(prevContacts=>prevContacts.filter(({ id }) => id !== contactId));
   };
 
   const filteredContacts = getFilteredContacts();
@@ -53,4 +55,4 @@ export const App = () => {
       )}
     </div>
   );
-}
+};
